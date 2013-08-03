@@ -1,8 +1,9 @@
 require "google/api_client"
 require "launchy"
 
-OAUTH_SCOPE          = 'https://www.googleapis.com/auth/blogger'
+OAUTH_SCOPE = 'https://www.googleapis.com/auth/blogger'
 
+# Set these variables according to your google client
 GOOGLE_CLIENT_KEY    = "YOUR_GOOGLE_CLIENT_KEY"
 GOOGLE_CLIENT_SECRET = "YOUR_GOOGLE_CLIENT_SECRET"
 REDIRECT_URI         = "YOUR_GOOGLE_CLIENT_REDIRECT_URI"
@@ -17,6 +18,8 @@ client.authorization.redirect_uri  = REDIRECT_URI
 client.authorization.scope         = OAUTH_SCOPE
 
 auth_uri = client.authorization.authorization_uri(access_type: :offline).to_s
+
+# Copy the authorization code from your browser and paste it in your script running terminal
 Launchy.open auth_uri
 
 puts "*" * 80
@@ -26,6 +29,8 @@ puts "*" * 80
 client.authorization.code = gets.chomp
 client.authorization.fetch_access_token!
 
+# Set your request to insert post
+# Check blogger api v3 docs to add others body_object parameters
 result = client.execute(
   api_method: blogger.posts.insert,
   headers:    { "Content-Type" => "application/json"    },
